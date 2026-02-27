@@ -18,38 +18,18 @@ It is modeled after the structure and workflow style of [`istari-digital-example
 ## Workflow Diagram (ASCII)
 
 ```text
-┌────────────────────────────┐
-│ campaign_spec.example.json │
-└───────────────┬────────────┘
-                │
-                v
-┌────────────────────────────┐
-│ pyintact/submit_campaign.py│
-│ creates many Istari jobs   │
-└───────────────┬────────────┘
-                │
-                v
-┌─────────────────────────────────────────────┐
-│ @istari:run_pyintact_simulation (N cases)   │
-│ outputs VTU + summary artifacts per case    │
-└───────────────┬─────────────────────────────┘
-                │
-                v
-┌─────────────────────────────────────────────┐
-│ @istari:assemble_dataset                    │
-│ builds training dataset from successful runs│
-└───────────────┬─────────────────────────────┘
-                │
-                v
-┌─────────────────────────────────────────────┐
-│ @istari:train_nemo_surrogate                │
-│ trains PhysicsNeMo model + logs metrics     │
-└───────────────┬─────────────────────────────┘
-                │
-                v
-┌─────────────────────────────────────────────┐
-│ Istari lineage + versioned surrogate model  │
-└─────────────────────────────────────────────┘
++--- Outer Dev Loop: Istari -- version - lineage - compare -----------------------------+
+|                                                                                       |
+|  +- Inner Dev Loop 1 --------+  +- Inner Dev Loop 2 --------+  +- Inner Dev Loop 3 -+ |
+|  | PyIntact: Sim Campaign    |  | Dataset: Build Training   |  | PhysicsNeMo: Train  | |
+|  | (Simulation Engineer)     |  | Set (Data/ML Engineer)    |  | Surrogate (ML Eng)  | |
+|  +-------------+-------------+  +-------------+-------------+  +-------------+--------+ |
+|                |                              |                              |          |
+|                v                              v                              v          |
++-----------------------------------------------------------------------------------------+
+| Outer-loop gates in Istari: throughput <-> data quality <-> model quality              |
+| --> Readiness report: PASS / FAIL per gate                                              |
++-----------------------------------------------------------------------------------------+
 ```
 
 ## 0) Prerequisites

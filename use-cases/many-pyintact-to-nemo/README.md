@@ -29,17 +29,18 @@ Run FEA cases manually          |                         |
 ## The New Way (with Istari)
 
 ```text
-+--- Outer Loop: Istari -- version - lineage - compare ----------------+
-|                                                                       |
-|  +- PyIntact ----------+   +- Dataset Builder -----+   +- PhysicsNeMo +|
-|  | run N simulations   |   | normalize artifacts    |   | train model   ||
-|  | (Engineer)          |   | (Data pipeline)        |   | (ML Engineer) ||
-|  +----------+----------+   +-----------+------------+   +------+-------+|
-|             |                          |                       |        |
-|             v                          v                       v        |
-+-----------------------------------------------------------------------+
-| Campaign manifest -> dataset revision -> model revision + metrics      |
-+-----------------------------------------------------------------------+
++--- Outer Dev Loop: Istari -- version - lineage - compare -----------------------------+
+|                                                                                       |
+|  +- Inner Dev Loop 1 --------+  +- Inner Dev Loop 2 --------+  +- Inner Dev Loop 3 -+ |
+|  | PyIntact: Sim Campaign    |  | Dataset: Build Training   |  | PhysicsNeMo: Train  | |
+|  | (Simulation Engineer)     |  | Set (Data/ML Engineer)    |  | Surrogate (ML Eng)  | |
+|  +-------------+-------------+  +-------------+-------------+  +-------------+--------+ |
+|                |                              |                              |          |
+|                v                              v                              v          |
++-----------------------------------------------------------------------------------------+
+| Outer-loop gates in Istari: throughput <-> data quality <-> model quality              |
+| --> Readiness report: PASS / FAIL per gate                                              |
++-----------------------------------------------------------------------------------------+
 ```
 
 Everyone works in parallel. Istari tracks the full lineage from campaign spec to surrogate model.
@@ -48,10 +49,10 @@ Everyone works in parallel. Istari tracks the full lineage from campaign spec to
 
 | Tool | Role |
 |------|------|
-| **Istari Platform** | Outer loop: job orchestration, artifact versioning, lineage, model promotion |
-| **PyIntact** (`@istari:run_pyintact_simulation`) | Inner loop: structural simulation sweeps |
-| **Dataset assembly** (`@istari:assemble_dataset`) | Inner loop: convert sim outputs to ML-ready tensors |
-| **PhysicsNeMo** (`@istari:train_nemo_surrogate`) | Inner loop: train physics AI surrogate |
+| **Istari Platform** | Outer dev loop: job orchestration, artifact versioning, lineage, and model promotion |
+| **PyIntact** (`@istari:run_pyintact_simulation`) | Inner dev loop 1: structural simulation sweeps |
+| **Dataset assembly** (`@istari:assemble_dataset`) | Inner dev loop 2: convert sim outputs to ML-ready tensors |
+| **PhysicsNeMo** (`@istari:train_nemo_surrogate`) | Inner dev loop 3: train physics AI surrogate |
 | **campaign_checks.py** | Produces a pass/fail report on campaign quality and model readiness |
 
 ## Milestones

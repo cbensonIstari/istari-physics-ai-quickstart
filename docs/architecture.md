@@ -3,25 +3,18 @@
 ## ASCII Workflow
 
 ```text
-Campaign spec
-  |
-  v
-submit_campaign.py
-  |
-  v
-@istari:run_pyintact_simulation (many jobs)
-  |
-  v
-Per-case VTU + summary artifacts
-  |
-  v
-@istari:assemble_dataset
-  |
-  v
-@istari:train_nemo_surrogate
-  |
-  v
-Versioned surrogate model + metrics + lineage
++--- Outer Dev Loop: Istari -- version - lineage - compare -----------------------------+
+|                                                                                       |
+|  +- Inner Dev Loop 1 --------+  +- Inner Dev Loop 2 --------+  +- Inner Dev Loop 3 -+ |
+|  | PyIntact: Sim Campaign    |  | Dataset: Build Training   |  | PhysicsNeMo: Train  | |
+|  | (Simulation Engineer)     |  | Set (Data/ML Engineer)    |  | Surrogate (ML Eng)  | |
+|  +-------------+-------------+  +-------------+-------------+  +-------------+--------+ |
+|                |                              |                              |          |
+|                v                              v                              v          |
++-----------------------------------------------------------------------------------------+
+| Outer-loop gates in Istari: throughput <-> data quality <-> model quality              |
+| --> Readiness report: PASS / FAIL per gate                                              |
++-----------------------------------------------------------------------------------------+
 ```
 
 ```mermaid
