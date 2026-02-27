@@ -1,5 +1,29 @@
 # Architecture: Physics AI Quickstart in Istari
 
+## ASCII Workflow
+
+```text
+Campaign spec
+  |
+  v
+submit_campaign.py
+  |
+  v
+@istari:run_pyintact_simulation (many jobs)
+  |
+  v
+Per-case VTU + summary artifacts
+  |
+  v
+@istari:assemble_dataset
+  |
+  v
+@istari:train_nemo_surrogate
+  |
+  v
+Versioned surrogate model + metrics + lineage
+```
+
 ```mermaid
 flowchart LR
     A[Campaign Spec JSON] --> B[submit_campaign.py]

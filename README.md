@@ -15,6 +15,43 @@ It is modeled after the structure and workflow style of [`istari-digital-example
 - A notebook for interactive execution
 - A K-script for product/UX alignment
 
+## Workflow Diagram (ASCII)
+
+```text
+┌────────────────────────────┐
+│ campaign_spec.example.json │
+└───────────────┬────────────┘
+                │
+                v
+┌────────────────────────────┐
+│ pyintact/submit_campaign.py│
+│ creates many Istari jobs   │
+└───────────────┬────────────┘
+                │
+                v
+┌─────────────────────────────────────────────┐
+│ @istari:run_pyintact_simulation (N cases)   │
+│ outputs VTU + summary artifacts per case    │
+└───────────────┬─────────────────────────────┘
+                │
+                v
+┌─────────────────────────────────────────────┐
+│ @istari:assemble_dataset                    │
+│ builds training dataset from successful runs│
+└───────────────┬─────────────────────────────┘
+                │
+                v
+┌─────────────────────────────────────────────┐
+│ @istari:train_nemo_surrogate                │
+│ trains PhysicsNeMo model + logs metrics     │
+└───────────────┬─────────────────────────────┘
+                │
+                v
+┌─────────────────────────────────────────────┐
+│ Istari lineage + versioned surrogate model  │
+└─────────────────────────────────────────────┘
+```
+
 ## 0) Prerequisites
 
 - Python 3.10+
