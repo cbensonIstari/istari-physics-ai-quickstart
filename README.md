@@ -140,4 +140,15 @@ python nemo/launch_training.py \
 
 - Quickstart use-case: [`use-cases/many-pyintact-to-nemo/README.md`](use-cases/many-pyintact-to-nemo/README.md)
 - K-script: [`docs/k-script-many-pyintact-to-nemo.md`](docs/k-script-many-pyintact-to-nemo.md)
-- Notebook: [`notebooks/pyintact_to_nemo_campaign.ipynb`](notebooks/pyintact_to_nemo_campaign.ipynb)
+- Notebook: [`use-cases/many-pyintact-to-nemo/run_campaign.ipynb`](use-cases/many-pyintact-to-nemo/run_campaign.ipynb)
+
+## Use Cases
+
+| Use Case | Question It Answers |
+|----------|---------------------|
+| [`many-pyintact-to-nemo`](use-cases/many-pyintact-to-nemo/) | Can we run many simulations and produce a promotable PhysicsNeMo model with clear pass/fail quality gates? |
+
+Use-case assets:
+- Notebook: [`use-cases/many-pyintact-to-nemo/run_campaign.ipynb`](use-cases/many-pyintact-to-nemo/run_campaign.ipynb)
+- Check script: [`use-cases/many-pyintact-to-nemo/campaign_checks.py`](use-cases/many-pyintact-to-nemo/campaign_checks.py)
+- Example input/output: [`use-cases/many-pyintact-to-nemo/example-input/`](use-cases/many-pyintact-to-nemo/example-input/) and [`use-cases/many-pyintact-to-nemo/example-output/`](use-cases/many-pyintact-to-nemo/example-output/)

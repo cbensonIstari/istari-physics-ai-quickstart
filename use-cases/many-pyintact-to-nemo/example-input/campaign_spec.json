@@ -1,0 +1,23 @@
+{
+  "campaign_name": "beam_linear_elastic_mvp",
+  "campaign_root_model_id": "REPLACE_WITH_MODEL_ID",
+  "simulation_type": "linear_elastic",
+  "geometry": {
+    "body_model_id": "REPLACE_WITH_BODY_STL_MODEL_ID",
+    "load_face_model_id": "REPLACE_WITH_LOAD_FACE_STL_MODEL_ID",
+    "restraint_face_model_id": "REPLACE_WITH_RESTRAINT_FACE_STL_MODEL_ID"
+  },
+  "base_material": {
+    "density": 7800.0
+  },
+  "scenario": {
+    "resolution": 1000,
+    "units": "MKS"
+  },
+  "grid": {
+    "pressure_pa": [200000.0, 500000.0, 1000000.0],
+    "youngs_modulus": [60000000000.0, 120000000000.0, 210000000000.0],
+    "poisson_ratio": [0.28, 0.3, 0.33]
+  },
+  "max_cases": 27
+}

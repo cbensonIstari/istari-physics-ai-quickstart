@@ -1,0 +1,9 @@
+{
+  "model_family": "physicsnemo",
+  "target_fields": ["von_mises", "displacement"],
+  "epochs": 120,
+  "batch_size": 16,
+  "learning_rate": 0.0005,
+  "validation_split": 0.2,
+  "notes": "MVP surrogate training configuration for structural campaign"
+}

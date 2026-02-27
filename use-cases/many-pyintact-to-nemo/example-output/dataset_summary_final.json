@@ -1,0 +1,8 @@
+{
+  "campaign_id": "beam_linear_elastic_mvp",
+  "samples_ready": 11,
+  "samples_failed": 1,
+  "schema_valid": true,
+  "field_names": ["von_mises", "displacement"],
+  "notes": "Dataset is ready for MVP training gate"
+}

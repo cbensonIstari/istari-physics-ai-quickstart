@@ -1,53 +1,151 @@
-# Use Case: Many PyIntact Simulations -> PhysicsNeMo Model
+# Use Case: Can We Turn Many Simulations Into a Physics AI Model?
 
-This is the minimal end-to-end flow for building a first physics AI model with Istari.
+## Intent
 
-## Goal
+A simulation engineer wants to run many structural simulations, train a surrogate model, and know quickly whether the model is good enough to use in design loops. The question is: **can we go from simulation campaign to trustworthy PhysicsNeMo model in one tracked workflow?**
 
-Train a surrogate model that predicts structural response fields from parameterized simulation inputs.
+## The Old Way
 
-## Inputs You Need in Istari
-
-- One root model for the campaign (`campaign_root_model_id`)
-- 3 geometry models (STL): body, load face, restraint face
-- Function availability:
-  - `@istari:run_pyintact_simulation`
-  - `@istari:assemble_dataset`
-  - `@istari:train_nemo_surrogate`
-
-## Step-by-Step
-
-1. Edit `campaign_spec.example.json` with real model IDs.
-2. Validate payload shape:
-
-```bash
-python pyintact/submit_campaign.py --spec use-cases/many-pyintact-to-nemo/campaign_spec.example.json --dry-run
+```text
+Simulation Engineer         Data Engineer             ML Engineer
+      |                         |                         |
+      v                         |                         |
+Run FEA cases manually          |                         |
+      |                         |                         |
+      +---- send files -------->|                         |
+      |                         v                         |
+      |                  Clean/reshape data              |
+      |                         |                         |
+      |<--- async fixes --------+                         |
+      |                                                   v
+      +------------------------ more handoffs ----------> Train model
+                                                        |
+                                                        v
+                                                  Offline report
 ```
 
-3. Submit campaign:
+**Problems:** file handoffs, weak provenance, delayed failure detection, and no shared record of which simulation data trained which model revision.
 
-```bash
-python pyintact/submit_campaign.py --spec use-cases/many-pyintact-to-nemo/campaign_spec.example.json
+## The New Way (with Istari)
+
+```text
++--- Outer Loop: Istari -- version - lineage - compare ----------------+
+|                                                                       |
+|  +- PyIntact ----------+   +- Dataset Builder -----+   +- PhysicsNeMo +|
+|  | run N simulations   |   | normalize artifacts    |   | train model   ||
+|  | (Engineer)          |   | (Data pipeline)        |   | (ML Engineer) ||
+|  +----------+----------+   +-----------+------------+   +------+-------+|
+|             |                          |                       |        |
+|             v                          v                       v        |
++-----------------------------------------------------------------------+
+| Campaign manifest -> dataset revision -> model revision + metrics      |
++-----------------------------------------------------------------------+
 ```
 
-4. Monitor:
+Everyone works in parallel. Istari tracks the full lineage from campaign spec to surrogate model.
 
-```bash
-python pyintact/poll_campaign.py --manifest campaign_jobs.json
+## Tools Used
+
+| Tool | Role |
+|------|------|
+| **Istari Platform** | Outer loop: job orchestration, artifact versioning, lineage, model promotion |
+| **PyIntact** (`@istari:run_pyintact_simulation`) | Inner loop: structural simulation sweeps |
+| **Dataset assembly** (`@istari:assemble_dataset`) | Inner loop: convert sim outputs to ML-ready tensors |
+| **PhysicsNeMo** (`@istari:train_nemo_surrogate`) | Inner loop: train physics AI surrogate |
+| **campaign_checks.py** | Produces a pass/fail report on campaign quality and model readiness |
+
+## Milestones
+
+### Milestone 1: Campaign runs in Istari
+
+Submit parameter sweeps as many PyIntact jobs and track case outcomes in one manifest.
+
+### Milestone 2: Dataset assembly is validated
+
+Confirm enough successful cases and schema validity before training.
+
+### Milestone 3: First surrogate is trained
+
+Launch PhysicsNeMo training and capture validation metrics in Istari.
+
+### Milestone 4: Model readiness decision
+
+Run quality checks and decide whether to promote the surrogate for downstream usage.
+
+## K-Script
+
+| Step | Interaction / Process | Unobservable Actions or Assumptions |
+|------|------------------------|-------------------------------------|
+| 1 | Engineer fills `campaign_spec.json` with geometry IDs and parameter grid | IDs point to existing models in Istari |
+| 2 | Engineer runs dry-run submit script | Payload shape is validated before any jobs are created |
+| 3 | Engineer submits full campaign | Script creates many `@istari:run_pyintact_simulation` jobs |
+| 4 | Istari agents process jobs in parallel | Effective concurrency depends on agent capacity and licenses |
+| 5 | Engineer polls statuses | Manifest updates to `succeeded` / `failed` / other terminal states |
+| 6 | Engineer launches dataset assembly | Failed jobs are excluded; successful artifacts are normalized |
+| 7 | Engineer launches PhysicsNeMo training | Dataset revision and training config are attached to job lineage |
+| 8 | Team lead runs quality checks | Report compares campaign throughput and model metrics to thresholds |
+| 9 | Team lead approves promotion (or requests rerun) | Decision is based on versioned artifacts, not ad hoc files |
+
+## Expected Results
+
+### Initial run (before campaign tuning)
+
+| Check | Target | Actual | Status |
+|------|--------|--------|--------|
+| Successful simulations | >= 10 cases | 8 cases | FAIL |
+| Failure rate | <= 20% | 33.3% | FAIL |
+| Dataset samples ready | >= 10 | 8 | FAIL |
+| Surrogate val normalized MAE | <= 0.08 | 0.14 | FAIL |
+| Surrogate val R2 | >= 0.90 | 0.81 | FAIL |
+
+### Tuned run (after grid cleanup + rerun)
+
+| Check | Target | Actual | Status |
+|------|--------|--------|--------|
+| Successful simulations | >= 10 cases | 11 cases | PASS |
+| Failure rate | <= 20% | 8.3% | PASS |
+| Dataset samples ready | >= 10 | 11 | PASS |
+| Surrogate val normalized MAE | <= 0.08 | 0.06 | PASS |
+| Surrogate val R2 | >= 0.90 | 0.94 | PASS |
+
+## Check Script
+
+The quick checks live in [`campaign_checks.py`](campaign_checks.py):
+
+```python
+from campaign_checks import run_all_checks, format_report, load_json
+
+manifest = load_json("example-output/campaign_jobs_final.json")
+dataset = load_json("example-output/dataset_summary_final.json")
+metrics = load_json("example-output/surrogate_metrics_final.json")
+
+results = run_all_checks(manifest, dataset, metrics)
+print(format_report(results))
 ```
 
-5. Assemble dataset in Istari (`@istari:assemble_dataset`) and capture `dataset_job_id`.
+## Example Files
 
-6. Launch PhysicsNeMo training:
+### [`example-input/`](example-input/) — what goes in
 
-```bash
-python nemo/launch_training.py \
-  --campaign-root-model-id <campaign_root_model_id> \
-  --dataset-job-id <dataset_job_id>
-```
+| File | Milestone | Description |
+|------|-----------|-------------|
+| `campaign_spec.json` | 1 | Campaign sweep definition with parameter grid and geometry model IDs |
+| `training_config.json` | 3 | PhysicsNeMo training hyperparameters |
 
-## Success Criteria for MVP
+### [`example-output/`](example-output/) — what comes out
 
-- At least 100 successful simulation runs
-- Dataset assembly job completes with no schema/units mismatch
-- Surrogate training converges and logs validation metrics in Istari
+| File | Milestone | Description |
+|------|-----------|-------------|
+| `campaign_jobs_initial.json` | 1 | Initial campaign manifest with many failed/timeout cases |
+| `campaign_jobs_final.json` | 1 | Tuned campaign manifest with high completion rate |
+| `dataset_summary_initial.json` | 2 | Initial dataset stats (insufficient sample count) |
+| `dataset_summary_final.json` | 2 | Final dataset stats (ready for training) |
+| `surrogate_metrics_initial.json` | 3 | First model validation metrics (below threshold) |
+| `surrogate_metrics_final.json` | 3 | Improved model validation metrics |
+| `quality_report_initial.md` | 4 | Initial quality decision report (not ready) |
+| `quality_report_final.md` | 4 | Final quality decision report (ready) |
+
+## Try It
+
+- Notebook: [`run_campaign.ipynb`](run_campaign.ipynb)
+- Check script: [`campaign_checks.py`](campaign_checks.py)

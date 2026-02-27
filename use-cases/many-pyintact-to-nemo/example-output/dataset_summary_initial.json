@@ -1,0 +1,8 @@
+{
+  "campaign_id": "beam_linear_elastic_mvp",
+  "samples_ready": 8,
+  "samples_failed": 4,
+  "schema_valid": true,
+  "field_names": ["von_mises", "displacement"],
+  "notes": "Insufficient sample count for target training quality"
+}

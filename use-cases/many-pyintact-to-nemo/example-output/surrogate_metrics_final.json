@@ -1,0 +1,7 @@
+{
+  "model_revision": "nemo_surrogate_v1",
+  "val_normalized_mae": 0.06,
+  "val_r2": 0.94,
+  "epochs": 120,
+  "best_epoch": 104
+}
