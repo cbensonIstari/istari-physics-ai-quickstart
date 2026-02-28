@@ -1,0 +1,14 @@
+{
+  "campaign_root_model": {
+    "type": "user_model",
+    "value": "test_files/train_nemo_surrogate/training_data.csv"
+  },
+  "dataset_job_id": {
+    "type": "parameter",
+    "value": "demo-dataset-job-id-001"
+  },
+  "training_config": {
+    "type": "parameter",
+    "value": "{\"backend\":\"baseline_mlp\",\"target_column\":\"target\",\"val_split\":0.25,\"random_seed\":7,\"ridge_lambda\":1e-6}"
+  }
+}

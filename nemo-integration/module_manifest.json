@@ -1,0 +1,54 @@
+{
+  "module_type": "function",
+  "module_key": "@istari:nemo",
+  "module_version": "0.1.0",
+  "module_display_name": "NeMo Surrogate Trainer (Scaffold)",
+  "module_checksum": "",
+  "internal": false,
+  "operating_systems": ["Ubuntu 22.04", "macOS 15", "macOS 26"],
+  "agent_version": ">=1.0.0",
+  "tool_key": "physicsnemo",
+  "tool_display_name": "PhysicsNeMo",
+  "tool_versions": ["0.1.0"],
+  "authors": [
+    {
+      "name": "Chris Benson",
+      "email": "cbenson@istaridigital.com",
+      "group": "@istari:engineering"
+    }
+  ],
+  "functions": {
+    "@istari:train_nemo_surrogate": [
+      {
+        "entrypoint": "src/run_docker.sh",
+        "run_command": "bash {entrypoint} {input_file} {output_file} {temp_dir}",
+        "display_name": "Train NeMo Surrogate (Scaffold)",
+        "function_schema": "function_schemas/train_nemo_surrogate.json",
+        "operating_systems": ["Ubuntu 22.04", "macOS 15", "macOS 26"],
+        "tool_versions": ["0.1.0"]
+      }
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=1.24",
+      "tool_type": "auxiliary_tool",
+      "display_name": "NumPy",
+      "command": "pip install numpy",
+      "reason": "Baseline surrogate training fallback (runs on CPU/Mac for first-time onboarding)"
+    }
+  ],
+  "scripts": [
+    {
+      "operating_systems": ["Ubuntu 22.04", "macOS 15", "macOS 26"],
+      "build": {
+        "command": "scripts/build.sh",
+        "output_path": "src/"
+      },
+      "install": "scripts/install.sh",
+      "test_unit": "scripts/test.sh",
+      "clean": "scripts/clean.sh"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "inputs": {
+    "campaign_root_model": {
+      "type": "user_model",
+      "validation_types": ["@extension:csv", "@extension:json"],
+      "display_name": "Training Dataset or Campaign Root Model"
+    },
+    "dataset_job_id": {
+      "type": "parameter",
+      "validation_types": [],
+      "display_name": "Dataset Assembly Job ID"
+    },
+    "training_config": {
+      "type": "parameter",
+      "validation_types": [],
+      "display_name": "Training Configuration (JSON object or JSON string)"
+    }
+  },
+  "outputs": [
+    {
+      "name": "metrics_json",
+      "type": "file",
+      "required": true,
+      "upload_as": "artifact",
+      "display_name": "Training Metrics (JSON)"
+    },
+    {
+      "name": "model_checkpoint_npz",
+      "type": "file",
+      "required": true,
+      "upload_as": "artifact",
+      "display_name": "Model Checkpoint (NPZ)"
+    },
+    {
+      "name": "training_report_md",
+      "type": "file",
+      "required": true,
+      "upload_as": "artifact",
+      "display_name": "Training Report (Markdown)"
+    }
+  ]
+}

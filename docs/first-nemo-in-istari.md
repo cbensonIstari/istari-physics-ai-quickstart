@@ -44,6 +44,10 @@ Create a module repo/folder (for example `nemo-integration`) with:
 - `scripts/install.sh`
 - `scripts/test.sh`
 
+This repository now includes that scaffold at:
+
+- `nemo-integration/`
+
 ### Module manifest essentials
 
 Use sysgit/pyintact conventions:
@@ -138,4 +142,3 @@ The launcher in this repo now preflights function availability and prints a clea
    - single GPU
 2. Confirm artifacts and metrics in Istari.
 3. Scale dataset/model only after baseline is stable.
-
