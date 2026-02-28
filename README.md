@@ -116,11 +116,39 @@ python nemo/launch_training.py \
 - Review lineage from campaign spec -> simulation cases -> dataset -> surrogate model
 - Promote only when validation criteria are met
 
+## 9) Validated Integration Run + Learnings
+
+A full SDK run was validated on **2026-02-28** with concrete artifacts and metrics.
+
+- System: [`89690e3c-f99d-426e-9cbf-98d0cf5f5653`](https://demo.istari.app/systems/89690e3c-f99d-426e-9cbf-98d0cf5f5653)
+- Configuration: [`d26674dc-d6c0-44f8-bced-74fb38e806bc`](https://demo.istari.app/systems/89690e3c-f99d-426e-9cbf-98d0cf5f5653/config/d26674dc-d6c0-44f8-bced-74fb38e806bc)
+- Job: `a21fa8e8-85bb-4301-b73b-e786555ad343` (`Completed`)
+- Produced outputs:
+  - `summary.json`
+  - `results.vtu`
+  - `visualization.png`
+- Key metrics:
+  - `solve_time_seconds=5.529`
+  - `max_von_mises_stress=1002390.1692623853 Pa`
+  - `min_von_mises_stress=663182.9699018181 Pa`
+
+Full run record, artifact links, and SDK edge cases:
+- [`docs/validated-pyintact-run-2026-02-28.md`](docs/validated-pyintact-run-2026-02-28.md)
+
+Reusable rerun script:
+
+```bash
+export ISTARI_DIGITAL_REGISTRY_URL=https://fileservice-v2.demo.istari.app
+export ISTARI_DIGITAL_REGISTRY_AUTH_TOKEN=<your-pat>
+python scripts/istari_versioned_pyintact_rerun.py
+```
+
 ## Fast Pointers
 
 - Quickstart use-case: [`use-cases/many-pyintact-to-nemo/README.md`](use-cases/many-pyintact-to-nemo/README.md)
 - K-script: [`docs/k-script-many-pyintact-to-nemo.md`](docs/k-script-many-pyintact-to-nemo.md)
 - Notebook: [`use-cases/many-pyintact-to-nemo/run_campaign.ipynb`](use-cases/many-pyintact-to-nemo/run_campaign.ipynb)
+- Validated run evidence: [`docs/validated-pyintact-run-2026-02-28.md`](docs/validated-pyintact-run-2026-02-28.md)
 
 ## Use Cases
 

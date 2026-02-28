@@ -109,6 +109,17 @@ Run quality checks and decide whether to promote the surrogate for downstream us
 | Surrogate val normalized MAE | <= 0.08 | 0.06 | PASS |
 | Surrogate val R2 | >= 0.90 | 0.94 | PASS |
 
+## Live Integration Evidence
+
+A real single-case SDK run using `@istari:run_pyintact_simulation` was completed on **2026-02-28** and produced:
+
+- `summary.json` (solve time + stress extrema)
+- `results.vtu` (field output)
+- `visualization.png` (quick visual check)
+
+See full evidence and links:
+- [`../../docs/validated-pyintact-run-2026-02-28.md`](../../docs/validated-pyintact-run-2026-02-28.md)
+
 ## Check Script
 
 The quick checks live in [`campaign_checks.py`](campaign_checks.py):
