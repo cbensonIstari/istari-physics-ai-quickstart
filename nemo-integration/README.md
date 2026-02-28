@@ -6,6 +6,16 @@ This module scaffolds an Istari function:
 
 It is designed for first-time setup and smoke testing of the Istari integration path before a full GPU PhysicsNeMo trainer is wired in.
 
+## Platform Note (2026-02)
+
+Current `stari module lint` validation accepts OS values:
+- `Ubuntu 24.04`, `Ubuntu 22.04`, `Ubuntu 20.04`
+- `RHEL 9`, `RHEL 8`
+- `Windows 10`, `Windows 11`, `Windows Server 2019`, `Windows Server 2022`
+
+Because of this, this manifest is published with `Ubuntu 22.04` support.
+You can still run local smoke tests on macOS via `scripts/test.sh`, but production Istari job routing should target a Linux agent.
+
 ## What This Scaffold Does
 
 - Accepts a model file (`.csv` or `.json`) as training data input.
@@ -57,8 +67,7 @@ stari client list functions --os | rg train_nemo_surrogate
 
 ## Install Location
 
-- macOS: `~/Library/Application Support/istari_agent/istari_modules/nemo/`
-- Linux: `/opt/local/istari_agent/istari_modules/nemo/`
+- macOS local test: `~/Library/Application Support/istari_agent/istari_modules/nemo/`
+- Linux production agent: `/opt/local/istari_agent/istari_modules/nemo/`
 
 Do not nest under `@istari/` subdirectories.
-

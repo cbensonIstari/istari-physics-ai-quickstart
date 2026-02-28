@@ -5,7 +5,7 @@
   "module_display_name": "NeMo Surrogate Trainer (Scaffold)",
   "module_checksum": "",
   "internal": false,
-  "operating_systems": ["Ubuntu 22.04", "macOS 15", "macOS 26"],
+  "operating_systems": ["Ubuntu 22.04"],
   "agent_version": ">=1.0.0",
   "tool_key": "physicsnemo",
   "tool_display_name": "PhysicsNeMo",
@@ -24,7 +24,7 @@
         "run_command": "bash {entrypoint} {input_file} {output_file} {temp_dir}",
         "display_name": "Train NeMo Surrogate (Scaffold)",
         "function_schema": "function_schemas/train_nemo_surrogate.json",
-        "operating_systems": ["Ubuntu 22.04", "macOS 15", "macOS 26"],
+        "operating_systems": ["Ubuntu 22.04"],
         "tool_versions": ["0.1.0"]
       }
     ]
@@ -41,7 +41,7 @@
   ],
   "scripts": [
     {
-      "operating_systems": ["Ubuntu 22.04", "macOS 15", "macOS 26"],
+      "operating_systems": ["Ubuntu 22.04"],
       "build": {
         "command": "scripts/build.sh",
         "output_path": "src/"

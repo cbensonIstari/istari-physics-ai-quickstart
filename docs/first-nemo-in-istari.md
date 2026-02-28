@@ -20,6 +20,7 @@ For real PhysicsNeMo training:
 - Use Linux/WSL + NVIDIA CUDA GPU (cloud or workstation).
 - Do not buy hardware first. Run small cloud experiments, measure run-time/cost, then decide.
 - MacBook Air is fine for SDK orchestration and notebooks, not ideal for production GPU training.
+- Current `stari module lint` schema also favors Linux/Windows OS labels for publishable modules.
 
 ## Deployment Model (Important)
 
