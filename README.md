@@ -149,6 +149,7 @@ python scripts/istari_versioned_pyintact_rerun.py
 - K-script: [`docs/k-script-many-pyintact-to-nemo.md`](docs/k-script-many-pyintact-to-nemo.md)
 - Notebook: [`use-cases/many-pyintact-to-nemo/run_campaign.ipynb`](use-cases/many-pyintact-to-nemo/run_campaign.ipynb)
 - Validated run evidence: [`docs/validated-pyintact-run-2026-02-28.md`](docs/validated-pyintact-run-2026-02-28.md)
+- First-time NeMo runbook: [`docs/first-nemo-in-istari.md`](docs/first-nemo-in-istari.md)
 
 ## Use Cases
 
